@@ -11,7 +11,10 @@ interface RankedListProps {
   results: OptimizationResult[];
   fleet: any[];
   onDecision: (trainId: string, action: string, note?: string) => void;
-  decisions: Record<string, { action: string; note?: string; operator?: string; timestamp?: string }>;
+  decisions: Record<
+    string,
+    { action: string; note?: string; operator?: string; timestamp?: string }
+  >;
   loading?: boolean;
 }
 
@@ -20,7 +23,7 @@ export const RankedList: React.FC<RankedListProps> = ({
   fleet,
   onDecision,
   decisions,
-  loading = false
+  loading = false,
 }) => {
   const [expandedTrain, setExpandedTrain] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'score' | 'confidence'>('score');
@@ -70,7 +73,9 @@ export const RankedList: React.FC<RankedListProps> = ({
           <div className="text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
             <p className="text-gray-600">Running AI optimizer...</p>
-            <p className="text-sm text-gray-500 mt-2">This may take a few moments</p>
+            <p className="text-sm text-gray-500 mt-2">
+              This may take a few moments
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -83,7 +88,9 @@ export const RankedList: React.FC<RankedListProps> = ({
         <CardContent className="text-center py-12">
           <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No Results</h3>
-          <p className="text-gray-600">Run the optimizer to generate induction recommendations</p>
+          <p className="text-gray-600">
+            Run the optimizer to generate induction recommendations
+          </p>
         </CardContent>
       </Card>
     );
@@ -112,13 +119,14 @@ export const RankedList: React.FC<RankedListProps> = ({
           </div>
         </div>
         <p className="text-sm text-gray-600">
-          AI-ranked list of trains recommended for induction based on fitness, depot balance, and branding priorities
+          AI-ranked list of trains recommended for induction based on fitness,
+          depot balance, and branding priorities
         </p>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {sortedResults.map((result, index) => {
-            const train = fleet.find(t => t.id === result.id);
+            const train = fleet.find((t) => t.id === result.id);
             const decision = decisions[result.id];
             const isExpanded = expandedTrain === result.id;
 
@@ -128,8 +136,8 @@ export const RankedList: React.FC<RankedListProps> = ({
               <div
                 key={result.id}
                 className={`border rounded-lg transition-all ${
-                  decision 
-                    ? 'border-primary-200 bg-primary-50' 
+                  decision
+                    ? 'border-primary-200 bg-primary-50'
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
@@ -144,14 +152,16 @@ export const RankedList: React.FC<RankedListProps> = ({
                           {result.id}
                         </span>
                       </div>
-                      
+
                       <div className="flex items-center gap-2">
-                        <span className={`text-lg font-bold ${getScoreColor(result.score)}`}>
+                        <span
+                          className={`text-lg font-bold ${getScoreColor(result.score)}`}
+                        >
                           {formatNumber(result.score * 100, 1)}%
                         </span>
                         {getConfidenceBadge(result.confidence)}
                       </div>
-                      
+
                       {result.conflicts.length > 0 && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-danger-100 text-danger-800">
                           <AlertTriangle className="h-3 w-3 mr-1" />
@@ -159,18 +169,20 @@ export const RankedList: React.FC<RankedListProps> = ({
                         </span>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       {decision && (
                         <span className="px-2 py-1 bg-primary-100 text-primary-800 text-xs rounded-full font-medium">
                           {decision.action}
                         </span>
                       )}
-                      
+
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setExpandedTrain(isExpanded ? null : result.id)}
+                        onClick={() =>
+                          setExpandedTrain(isExpanded ? null : result.id)
+                        }
                       >
                         {isExpanded ? (
                           <>
@@ -186,7 +198,7 @@ export const RankedList: React.FC<RankedListProps> = ({
                       </Button>
                     </div>
                   </div>
-                  
+
                   {/* Quick reasons preview */}
                   <div className="mt-3 flex flex-wrap gap-2">
                     {result.reasons.slice(0, 3).map((reason, idx) => (
@@ -204,7 +216,7 @@ export const RankedList: React.FC<RankedListProps> = ({
                     )}
                   </div>
                 </div>
-                
+
                 {/* Expanded details */}
                 {isExpanded && (
                   <div className="border-t border-gray-200 p-4 bg-gray-50">
@@ -220,7 +232,7 @@ export const RankedList: React.FC<RankedListProps> = ({
             );
           })}
         </div>
-        
+
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">
           <div className="flex items-start gap-3">
             <div className="bg-blue-100 p-1 rounded-full">
@@ -229,9 +241,9 @@ export const RankedList: React.FC<RankedListProps> = ({
             <div className="text-sm text-blue-800">
               <p className="font-medium mb-1">AI Optimization Summary</p>
               <p>
-                Generated {results.length} recommendations based on fitness scores, 
-                depot balance, maintenance schedules, and branding priorities. 
-                Higher scores indicate better induction candidates.
+                Generated {results.length} recommendations based on fitness
+                scores, depot balance, maintenance schedules, and branding
+                priorities. Higher scores indicate better induction candidates.
               </p>
             </div>
           </div>

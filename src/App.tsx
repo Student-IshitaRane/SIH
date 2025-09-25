@@ -11,14 +11,15 @@ import { Branding } from './pages/Branding';
 import { History } from './pages/History';
 import { Analytics } from './pages/Analytics';
 import { Settings } from './pages/Settings';
+import { MLIngest } from './pages/MLIngest';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -27,96 +28,88 @@ function App() {
 
   return (
     <Routes>
-      <Route 
-        path="/login" 
+      <Route
+        path="/login"
         element={
           isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginForm />
-        } 
+        }
       />
-      <Route 
-        path="/dashboard" 
+      <Route
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/induction" 
+      <Route
+        path="/induction"
         element={
           <ProtectedRoute>
             <InductionDecisions />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/maintenance" 
+      <Route
+        path="/maintenance"
         element={
           <ProtectedRoute>
             <Maintenance />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/simulator" 
+      <Route
+        path="/simulator"
         element={
           <ProtectedRoute>
             <Simulator />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/alerts" 
+      <Route
+        path="/alerts"
         element={
           <ProtectedRoute>
             <Alerts />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/branding" 
+      <Route
+        path="/branding"
         element={
           <ProtectedRoute>
             <Branding />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/history" 
+      <Route
+        path="/history"
         element={
           <ProtectedRoute>
             <History />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/analytics" 
+      <Route
+        path="/analytics"
         element={
           <ProtectedRoute>
             <Analytics />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/settings" 
+      <Route
+        path="/ml-ingest"
         element={
           <ProtectedRoute>
-            <Settings />
+            <MLIngest />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/" 
-        element={<Navigate to="/dashboard" replace />} 
-      />
-      <Route 
-        path="*" 
-        element={<Navigate to="/dashboard" replace />} 
-      />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }
 
 export default App;
-
-

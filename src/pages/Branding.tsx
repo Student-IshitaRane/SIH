@@ -1,38 +1,46 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useBrandingCampaigns, useFleet } from '../hooks/useApi';
 import { formatDate, formatPercentage } from '../utils';
-import { 
-  Megaphone, 
-  Plus, 
-  Edit, 
-  Eye, 
+import {
+  Megaphone,
+  Plus,
+  Edit,
+  Eye,
   Calendar,
   Target,
-  TrendingUp
+  TrendingUp,
 } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 
 export const Branding: React.FC = () => {
-  const { data: campaigns, isLoading: campaignsLoading } = useBrandingCampaigns();
+  const { data: campaigns, isLoading: campaignsLoading } =
+    useBrandingCampaigns();
   const { data: fleet, isLoading: fleetLoading } = useFleet();
   // const [selectedCampaign, setSelectedCampaign] = useState<string | null>(null);
 
   const isLoading = campaignsLoading || fleetLoading;
 
   const getCampaignTrains = (campaignId: string) => {
-    const campaign = campaigns?.find(c => c.id === campaignId);
+    const campaign = campaigns?.find((c) => c.id === campaignId);
     if (!campaign) return [];
-    return fleet?.filter(train => campaign.target_trains.includes(train.id)) || [];
+    return (
+      fleet?.filter((train) => campaign.target_trains.includes(train.id)) || []
+    );
   };
 
   const getCampaignStatus = (campaign: any) => {
     const now = new Date();
     const startDate = new Date(campaign.start_date);
     const endDate = new Date(campaign.end_date);
-    
+
     if (now < startDate) return 'scheduled';
     if (now > endDate) return 'completed';
     if (campaign.status === 'paused') return 'paused';
@@ -74,8 +82,10 @@ export const Branding: React.FC = () => {
     );
   }
 
-  const activeCampaigns = campaigns?.filter(c => getCampaignStatus(c) === 'active').length || 0;
-  const totalTrainsWithBranding = campaigns?.reduce((acc, c) => acc + c.target_trains.length, 0) || 0;
+  const activeCampaigns =
+    campaigns?.filter((c) => getCampaignStatus(c) === 'active').length || 0;
+  const totalTrainsWithBranding =
+    campaigns?.reduce((acc, c) => acc + c.target_trains.length, 0) || 0;
 
   return (
     <Layout>
@@ -83,7 +93,9 @@ export const Branding: React.FC = () => {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Branding Campaigns</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Branding Campaigns
+            </h1>
             <p className="text-gray-600 mt-1">
               Manage advertising campaigns and train branding assignments
             </p>
@@ -104,12 +116,14 @@ export const Branding: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Active Campaigns</p>
-                  <p className="text-2xl font-bold text-gray-900">{activeCampaigns}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {activeCampaigns}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -118,12 +132,14 @@ export const Branding: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Branded Trains</p>
-                  <p className="text-2xl font-bold text-gray-900">{totalTrainsWithBranding}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {totalTrainsWithBranding}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -133,10 +149,16 @@ export const Branding: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Avg Visibility</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {campaigns?.length ? 
-                      formatPercentage(campaigns.reduce((acc, c) => acc + c.visibility_score, 0) / campaigns.length * 100) 
-                      : '0%'
-                    }
+                    {campaigns?.length
+                      ? formatPercentage(
+                          (campaigns.reduce(
+                            (acc, c) => acc + c.visibility_score,
+                            0
+                          ) /
+                            campaigns.length) *
+                            100
+                        )
+                      : '0%'}
                   </p>
                 </div>
               </div>
@@ -157,7 +179,7 @@ export const Branding: React.FC = () => {
               {campaigns?.map((campaign) => {
                 const status = getCampaignStatus(campaign);
                 const campaignTrains = getCampaignTrains(campaign.id);
-                
+
                 return (
                   <div
                     key={campaign.id}
@@ -166,39 +188,63 @@ export const Branding: React.FC = () => {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-medium text-gray-900">{campaign.name}</h3>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
+                          <h3 className="font-medium text-gray-900">
+                            {campaign.name}
+                          </h3>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`}
+                          >
                             {status}
                           </span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(campaign.priority)}`}>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(campaign.priority)}`}
+                          >
                             Priority {campaign.priority}
                           </span>
                         </div>
-                        
-                        <p className="text-sm text-gray-600 mb-3">{campaign.description}</p>
-                        
+
+                        <p className="text-sm text-gray-600 mb-3">
+                          {campaign.description}
+                        </p>
+
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                           <div>
                             <span className="text-gray-600">Start Date:</span>
-                            <div className="font-medium">{formatDate(campaign.start_date)}</div>
+                            <div className="font-medium">
+                              {formatDate(campaign.start_date)}
+                            </div>
                           </div>
                           <div>
                             <span className="text-gray-600">End Date:</span>
-                            <div className="font-medium">{formatDate(campaign.end_date)}</div>
+                            <div className="font-medium">
+                              {formatDate(campaign.end_date)}
+                            </div>
                           </div>
                           <div>
-                            <span className="text-gray-600">Target Trains:</span>
-                            <div className="font-medium">{campaign.target_trains.length} trains</div>
+                            <span className="text-gray-600">
+                              Target Trains:
+                            </span>
+                            <div className="font-medium">
+                              {campaign.target_trains.length} trains
+                            </div>
                           </div>
                           <div>
-                            <span className="text-gray-600">Visibility Score:</span>
-                            <div className="font-medium">{formatPercentage(campaign.visibility_score * 100)}</div>
+                            <span className="text-gray-600">
+                              Visibility Score:
+                            </span>
+                            <div className="font-medium">
+                              {formatPercentage(
+                                campaign.visibility_score * 100
+                              )}
+                            </div>
                           </div>
                         </div>
-                        
+
                         {/* Train List */}
                         <div className="mt-4">
-                          <h4 className="text-sm font-medium text-gray-900 mb-2">Assigned Trains:</h4>
+                          <h4 className="text-sm font-medium text-gray-900 mb-2">
+                            Assigned Trains:
+                          </h4>
                           <div className="flex flex-wrap gap-2">
                             {campaignTrains.slice(0, 10).map((train) => (
                               <span
@@ -216,7 +262,7 @@ export const Branding: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 ml-4">
                         <Button size="sm" variant="outline">
                           <Eye className="h-4 w-4 mr-1" />
@@ -231,12 +277,14 @@ export const Branding: React.FC = () => {
                   </div>
                 );
               })}
-              
+
               {(!campaigns || campaigns.length === 0) && (
                 <div className="text-center py-8 text-gray-500">
                   <Megaphone className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                   <p>No branding campaigns found</p>
-                  <p className="text-sm">Create your first campaign to get started</p>
+                  <p className="text-sm">
+                    Create your first campaign to get started
+                  </p>
                 </div>
               )}
             </div>

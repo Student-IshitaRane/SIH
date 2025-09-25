@@ -1,17 +1,18 @@
-import { 
-  Trainset, 
-  OptimizationRun, 
-  DecisionSnapshot, 
-  MaintenanceJob, 
-  Alert, 
-  BrandingCampaign, 
-  KPIMetrics, 
-  SimulationParams, 
+import {
+  Trainset,
+  OptimizationRun,
+  DecisionSnapshot,
+  MaintenanceJob,
+  Alert,
+  BrandingCampaign,
+  KPIMetrics,
+  SimulationParams,
   SimulationResult,
   User,
   ApiResponse,
-  PaginatedResponse
+  PaginatedResponse,
 } from '../types';
+import type { DatasetType, RowData } from '../utils/csv';
 
 const API_BASE_URL = '/api';
 
@@ -35,7 +36,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
       response
     );
   }
-  
+
   return response.json();
 }
 
@@ -171,7 +172,11 @@ export const api = {
       },
       body: JSON.stringify(params),
     });
-    return handleResponse<{ download_url: string; filename: string; expires_at: string }>(response);
+    return handleResponse<{
+      download_url: string;
+      filename: string;
+      expires_at: string;
+    }>(response);
   },
 
   async exportPDF(params: {
@@ -188,10 +193,59 @@ export const api = {
       },
       body: JSON.stringify(params),
     });
-    return handleResponse<{ download_url: string; filename: string; expires_at: string }>(response);
+    return handleResponse<{
+      download_url: string;
+      filename: string;
+      expires_at: string;
+    }>(response);
+  },
+
+  // ML ingest endpoint
+  async mlIngest(payload: {
+    dataset: DatasetType;
+    rows: RowData[];
+  }): Promise<{ status: string; ingested: number; high_risk_ids?: string[] } & ApiResponse<unknown>> {
+    const response = await fetch(`${API_BASE_URL}/ml/ingest`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<{ status: string; ingested: number; high_risk_ids?: string[] } & ApiResponse<unknown>>(response);
+  },
+
+  // Save per-feature data on backend so it can build master CSV server-side
+  async mlSaveFeature(payload: { dataset: DatasetType; rows: RowData[] }): Promise<{ status: string; saved: number } & ApiResponse<unknown>> {
+    const response = await fetch(`${API_BASE_URL}/ml/feature`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<{ status: string; saved: number } & ApiResponse<unknown>>(response);
+  },
+
+  // Optionally fetch master CSV from backend if available
+  async mlGetMasterCSV(): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/ml/master.csv`, {
+      headers: { Accept: 'text/csv' },
+    });
+    if (!response.ok) {
+      throw new ApiError(`HTTP ${response.status}: ${response.statusText}`, response.status, response);
+    }
+    return response.text();
+  },
+
+  // Load feature CSVs from local folder on the backend (server reads d:/csv files)
+  async mlLoadLocal(): Promise<{ status: string; loaded: Record<string, number>; total_feature_rows: number }> {
+    const response = await fetch(`${API_BASE_URL}/ml/load-local`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return handleResponse<{ status: string; loaded: Record<string, number>; total_feature_rows: number }>(response);
   },
 };
 
 export { ApiError };
-
-

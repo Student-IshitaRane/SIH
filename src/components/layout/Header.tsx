@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" className="relative">
             <Bell className="h-5 w-5" />
@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
               3
             </span>
           </Button>
-          
+
           <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
             <User className="h-4 w-4 text-gray-600" />
             <div className="text-sm">
@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
               <p className="text-gray-500">{user?.role}</p>
             </div>
           </div>
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -55,5 +55,3 @@ export const Header: React.FC = () => {
     </header>
   );
 };
-
-

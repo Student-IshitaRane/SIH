@@ -21,32 +21,29 @@ export const useInductionStore = create<InductionState>((set, get) => ({
   decisions: [],
   published: false,
   snapshots: [],
-  setCurrentRun: (run: OptimizationRun) =>
-    set({ currentRun: run }),
+  setCurrentRun: (run: OptimizationRun) => set({ currentRun: run }),
   addDecision: (decision: Decision) =>
     set((state) => ({
-      decisions: [...state.decisions.filter(d => d.id !== decision.id), decision]
+      decisions: [
+        ...state.decisions.filter((d) => d.id !== decision.id),
+        decision,
+      ],
     })),
   updateDecision: (trainId: string, decision: Partial<Decision>) =>
     set((state) => ({
-      decisions: state.decisions.map(d =>
+      decisions: state.decisions.map((d) =>
         d.id === trainId ? { ...d, ...decision } : d
-      )
+      ),
     })),
   removeDecision: (trainId: string) =>
     set((state) => ({
-      decisions: state.decisions.filter(d => d.id !== trainId)
+      decisions: state.decisions.filter((d) => d.id !== trainId),
     })),
-  clearDecisions: () =>
-    set({ decisions: [] }),
-  setPublished: (published: boolean) =>
-    set({ published }),
+  clearDecisions: () => set({ decisions: [] }),
+  setPublished: (published: boolean) => set({ published }),
   addSnapshot: (snapshot: DecisionSnapshot) =>
     set((state) => ({
-      snapshots: [snapshot, ...state.snapshots]
+      snapshots: [snapshot, ...state.snapshots],
     })),
-  setSnapshots: (snapshots: DecisionSnapshot[]) =>
-    set({ snapshots }),
+  setSnapshots: (snapshots: DecisionSnapshot[]) => set({ snapshots }),
 }));
-
-

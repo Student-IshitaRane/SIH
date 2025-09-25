@@ -1,16 +1,31 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/Card';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from 'recharts';
 import { useKPIs, useHistory } from '../hooks/useApi';
 import { formatPercentage, formatCurrency } from '../utils';
-import { 
-  BarChart3, 
-  TrendingUp, 
+import {
+  BarChart3,
+  TrendingUp,
   TrendingDown,
   Activity,
   Clock,
-  DollarSign
+  DollarSign,
 } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 
@@ -92,16 +107,19 @@ export const Analytics: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Punctuality</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {formatPercentage(kpis?.punctuality.on_time_percentage || 0)}
+                    {formatPercentage(
+                      kpis?.punctuality.on_time_percentage || 0
+                    )}
                   </p>
                   <p className="text-xs text-gray-500">
-                    Target: {formatPercentage(kpis?.punctuality.target_percentage || 0)}
+                    Target:{' '}
+                    {formatPercentage(kpis?.punctuality.target_percentage || 0)}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -111,16 +129,19 @@ export const Analytics: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Cost Savings</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {formatCurrency(kpis?.maintenance_cost.savings_estimate || 0)}
+                    {formatCurrency(
+                      kpis?.maintenance_cost.savings_estimate || 0
+                    )}
                   </p>
                   <p className="text-xs text-gray-500">
-                    Target: {formatCurrency(kpis?.maintenance_cost.target_savings || 0)}
+                    Target:{' '}
+                    {formatCurrency(kpis?.maintenance_cost.target_savings || 0)}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -130,16 +151,21 @@ export const Analytics: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Transparency</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {formatPercentage(kpis?.transparency.auto_explained_percentage || 0)}
+                    {formatPercentage(
+                      kpis?.transparency.auto_explained_percentage || 0
+                    )}
                   </p>
                   <p className="text-xs text-gray-500">
-                    Target: {formatPercentage(kpis?.transparency.target_percentage || 0)}
+                    Target:{' '}
+                    {formatPercentage(
+                      kpis?.transparency.target_percentage || 0
+                    )}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -171,7 +197,12 @@ export const Analytics: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [formatPercentage(Number(value)), 'Utilization']} />
+                  <Tooltip
+                    formatter={(value) => [
+                      formatPercentage(Number(value)),
+                      'Utilization',
+                    ]}
+                  />
                   <Bar dataKey="utilization" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
@@ -189,9 +220,25 @@ export const Analytics: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="week" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [formatPercentage(Number(value)), 'Punctuality']} />
-                  <Line type="monotone" dataKey="punctuality" stroke="#10b981" strokeWidth={2} />
-                  <Line type="monotone" dataKey="target" stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" />
+                  <Tooltip
+                    formatter={(value) => [
+                      formatPercentage(Number(value)),
+                      'Punctuality',
+                    ]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="punctuality"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="target"
+                    stroke="#ef4444"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -211,7 +258,11 @@ export const Analytics: React.FC = () => {
                   <Tooltip />
                   <Bar dataKey="inducted" fill="#10b981" name="Inducted" />
                   <Bar dataKey="standby" fill="#f59e0b" name="Standby" />
-                  <Bar dataKey="maintenance" fill="#ef4444" name="Maintenance" />
+                  <Bar
+                    dataKey="maintenance"
+                    fill="#ef4444"
+                    name="Maintenance"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -228,7 +279,12 @@ export const Analytics: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [formatCurrency(Number(value)), 'Amount']} />
+                  <Tooltip
+                    formatter={(value) => [
+                      formatCurrency(Number(value)),
+                      'Amount',
+                    ]}
+                  />
                   <Bar dataKey="cost" fill="#ef4444" name="Cost" />
                   <Bar dataKey="savings" fill="#10b981" name="Savings" />
                 </BarChart>
@@ -245,9 +301,16 @@ export const Analytics: React.FC = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {operatorPerformanceData.map((operator, index) => (
-                <div key={operator.name} className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className="text-lg font-bold text-gray-900">{operator.name}</div>
-                  <div className="text-2xl font-bold text-primary-600 mt-2">{operator.decisions}</div>
+                <div
+                  key={operator.name}
+                  className="text-center p-4 bg-gray-50 rounded-lg"
+                >
+                  <div className="text-lg font-bold text-gray-900">
+                    {operator.name}
+                  </div>
+                  <div className="text-2xl font-bold text-primary-600 mt-2">
+                    {operator.decisions}
+                  </div>
                   <div className="text-sm text-gray-600">Decisions Made</div>
                   <div className="text-lg font-bold text-success-600 mt-2">
                     {formatPercentage(operator.accuracy)}

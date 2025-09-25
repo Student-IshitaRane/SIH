@@ -1,16 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../services/api';
-import { 
-  Trainset, 
-  OptimizationRun, 
-  DecisionSnapshot, 
-  MaintenanceJob, 
-  Alert, 
-  BrandingCampaign, 
-  KPIMetrics, 
-  SimulationParams, 
+import {
+  Trainset,
+  OptimizationRun,
+  DecisionSnapshot,
+  MaintenanceJob,
+  Alert,
+  BrandingCampaign,
+  KPIMetrics,
+  SimulationParams,
   SimulationResult,
-  User
+  User,
 } from '../types';
 
 // Query keys
@@ -36,7 +36,7 @@ export const useFleet = () => {
 // Optimization hooks
 export const useOptimize = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.optimize,
     onSuccess: (data) => {
@@ -49,7 +49,7 @@ export const useOptimize = () => {
 // Decision hooks
 export const useSaveDecisions = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.saveDecisions,
     onSuccess: () => {
@@ -117,7 +117,7 @@ export const useSimulate = () => {
 // Auth hooks
 export const useLogin = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.login,
     onSuccess: (data) => {
@@ -148,5 +148,3 @@ export const useExportPDF = () => {
     mutationFn: api.exportPDF,
   });
 };
-
-

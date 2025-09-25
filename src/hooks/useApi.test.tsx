@@ -9,20 +9,51 @@ import { useFleet, useKPIs, useAlerts } from './useApi';
 const server = setupServer(
   http.get('/api/fleet', () => {
     return HttpResponse.json([
-      { id: 'T01', depot: 'A', mileage_km: 125000, fitness_score: 0.92, available: true }
+      {
+        id: 'T01',
+        depot: 'A',
+        mileage_km: 125000,
+        fitness_score: 0.92,
+        available: true,
+      },
     ]);
   }),
   http.get('/api/kpis', () => {
     return HttpResponse.json({
-      punctuality: { on_time_percentage: 94.2, target_percentage: 95.0, trend: 'up' },
-      maintenance_cost: { savings_estimate: 125000, target_savings: 150000, trend: 'stable' },
-      transparency: { auto_explained_percentage: 87.5, target_percentage: 90.0, trend: 'up' },
-      depot_utilization: { depot_a: 78.5, depot_b: 82.3, depot_c: 75.8, average: 78.9 }
+      punctuality: {
+        on_time_percentage: 94.2,
+        target_percentage: 95.0,
+        trend: 'up',
+      },
+      maintenance_cost: {
+        savings_estimate: 125000,
+        target_savings: 150000,
+        trend: 'stable',
+      },
+      transparency: {
+        auto_explained_percentage: 87.5,
+        target_percentage: 90.0,
+        trend: 'up',
+      },
+      depot_utilization: {
+        depot_a: 78.5,
+        depot_b: 82.3,
+        depot_c: 75.8,
+        average: 78.9,
+      },
     });
   }),
   http.get('/api/alerts', () => {
     return HttpResponse.json([
-      { id: 'A01', train_id: 'T12', type: 'fitness_fail', severity: 'critical', timestamp: '2025-09-18T21:40:00Z', message: 'Test alert', resolved: false }
+      {
+        id: 'A01',
+        train_id: 'T12',
+        type: 'fitness_fail',
+        severity: 'critical',
+        timestamp: '2025-09-18T21:40:00Z',
+        message: 'Test alert',
+        resolved: false,
+      },
     ]);
   })
 );
@@ -54,7 +85,13 @@ describe('API Hooks', () => {
       });
 
       expect(result.current.data).toEqual([
-        { id: 'T01', depot: 'A', mileage_km: 125000, fitness_score: 0.92, available: true }
+        {
+          id: 'T01',
+          depot: 'A',
+          mileage_km: 125000,
+          fitness_score: 0.92,
+          available: true,
+        },
       ]);
     });
 
@@ -78,7 +115,9 @@ describe('API Hooks', () => {
       });
 
       expect(result.current.data?.punctuality.on_time_percentage).toBe(94.2);
-      expect(result.current.data?.maintenance_cost.savings_estimate).toBe(125000);
+      expect(result.current.data?.maintenance_cost.savings_estimate).toBe(
+        125000
+      );
     });
   });
 
@@ -93,7 +132,15 @@ describe('API Hooks', () => {
       });
 
       expect(result.current.data).toEqual([
-        { id: 'A01', train_id: 'T12', type: 'fitness_fail', severity: 'critical', timestamp: '2025-09-18T21:40:00Z', message: 'Test alert', resolved: false }
+        {
+          id: 'A01',
+          train_id: 'T12',
+          type: 'fitness_fail',
+          severity: 'critical',
+          timestamp: '2025-09-18T21:40:00Z',
+          message: 'Test alert',
+          resolved: false,
+        },
       ]);
     });
   });

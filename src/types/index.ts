@@ -80,7 +80,11 @@ export interface MaintenanceJob {
 export interface Alert {
   id: string;
   train_id: string;
-  type: 'fitness_fail' | 'maintenance_overdue' | 'depot_full' | 'branding_expired';
+  type:
+    | 'fitness_fail'
+    | 'maintenance_overdue'
+    | 'depot_full'
+    | 'branding_expired';
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: string;
   message: string;
@@ -182,5 +186,3 @@ export interface PaginatedResponse<T> {
   status: 'success' | 'error';
   message?: string;
 }
-
-

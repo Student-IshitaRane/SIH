@@ -33,7 +33,10 @@ export const RecentAlerts: React.FC = () => {
   if (!alerts) return null;
 
   const recentAlerts = alerts
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    )
     .slice(0, 5);
 
   const getAlertIcon = (type: string) => {
@@ -68,14 +71,20 @@ export const RecentAlerts: React.FC = () => {
               <div
                 key={alert.id}
                 className={`p-3 rounded-lg border ${
-                  alert.resolved ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'
+                  alert.resolved
+                    ? 'bg-gray-50 border-gray-200'
+                    : 'bg-white border-gray-200'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3">
-                    <div className={`p-1 rounded-full ${
-                      alert.resolved ? 'bg-gray-100 text-gray-500' : 'bg-danger-100 text-danger-600'
-                    }`}>
+                    <div
+                      className={`p-1 rounded-full ${
+                        alert.resolved
+                          ? 'bg-gray-100 text-gray-500'
+                          : 'bg-danger-100 text-danger-600'
+                      }`}
+                    >
                       {getAlertIcon(alert.type)}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -83,7 +92,9 @@ export const RecentAlerts: React.FC = () => {
                         <span className="font-medium text-sm text-gray-900">
                           Train {alert.train_id}
                         </span>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getSeverityColor(alert.severity)}`}>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getSeverityColor(alert.severity)}`}
+                        >
                           {alert.severity}
                         </span>
                       </div>
@@ -114,5 +125,3 @@ export const RecentAlerts: React.FC = () => {
     </Card>
   );
 };
-
-

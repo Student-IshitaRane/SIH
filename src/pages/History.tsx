@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useHistory, useExportCSV, useExportPDF } from '../hooks/useApi';
 import { formatDate, formatRelativeTime } from '../utils';
-import { 
-  History as HistoryIcon, 
-  Download, 
-  Eye, 
+import {
+  History as HistoryIcon,
+  Download,
+  Eye,
   Calendar,
   User,
   FileText,
   Filter,
-  Search
+  Search,
 } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -25,23 +30,27 @@ export const History: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState<string>('all');
 
-  const filteredHistory = history?.filter(snapshot => {
-    const matchesSearch = snapshot.operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         snapshot.snapshot_id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDate = dateFilter === 'all' || 
-      new Date(snapshot.date).toDateString() === new Date(dateFilter).toDateString();
-    return matchesSearch && matchesDate;
-  }) || [];
+  const filteredHistory =
+    history?.filter((snapshot) => {
+      const matchesSearch =
+        snapshot.operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        snapshot.snapshot_id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDate =
+        dateFilter === 'all' ||
+        new Date(snapshot.date).toDateString() ===
+          new Date(dateFilter).toDateString();
+      return matchesSearch && matchesDate;
+    }) || [];
 
   const handleExportCSV = async () => {
     try {
       const result = await exportCSVMutation.mutateAsync({
         date_range: {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          end: new Date().toISOString()
-        }
+          end: new Date().toISOString(),
+        },
       });
-      
+
       // Simulate download
       const link = document.createElement('a');
       link.href = result.download_url;
@@ -49,7 +58,7 @@ export const History: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       toast.success('CSV export started');
     } catch (error: any) {
       toast.error(error.message || 'Export failed');
@@ -61,10 +70,10 @@ export const History: React.FC = () => {
       const result = await exportPDFMutation.mutateAsync({
         date_range: {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          end: new Date().toISOString()
-        }
+          end: new Date().toISOString(),
+        },
       });
-      
+
       // Simulate download
       const link = document.createElement('a');
       link.href = result.download_url;
@@ -72,7 +81,7 @@ export const History: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       toast.success('PDF export started');
     } catch (error: any) {
       toast.error(error.message || 'Export failed');
@@ -98,14 +107,16 @@ export const History: React.FC = () => {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">History & Export</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              History & Export
+            </h1>
             <p className="text-gray-600 mt-1">
               View past induction decisions and export reports
             </p>
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleExportCSV}
               loading={exportCSVMutation.isPending}
               className="flex items-center gap-2"
@@ -113,7 +124,7 @@ export const History: React.FC = () => {
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
-            <Button 
+            <Button
               onClick={handleExportPDF}
               loading={exportPDFMutation.isPending}
               className="flex items-center gap-2"
@@ -134,12 +145,14 @@ export const History: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Total Snapshots</p>
-                  <p className="text-2xl font-bold text-gray-900">{history?.length || 0}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {history?.length || 0}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -149,16 +162,18 @@ export const History: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">This Month</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {history?.filter(s => 
-                      new Date(s.date).getMonth() === new Date().getMonth() &&
-                      new Date(s.date).getFullYear() === new Date().getFullYear()
+                    {history?.filter(
+                      (s) =>
+                        new Date(s.date).getMonth() === new Date().getMonth() &&
+                        new Date(s.date).getFullYear() ===
+                          new Date().getFullYear()
                     ).length || 0}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -168,13 +183,13 @@ export const History: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Active Operators</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {new Set(history?.map(s => s.operator) || []).size}
+                    {new Set(history?.map((s) => s.operator) || []).size}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -184,10 +199,14 @@ export const History: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Avg Decisions</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {history?.length ? 
-                      Math.round(history.reduce((acc, s) => acc + s.decisions.length, 0) / history.length) 
-                      : 0
-                    }
+                    {history?.length
+                      ? Math.round(
+                          history.reduce(
+                            (acc, s) => acc + s.decisions.length,
+                            0
+                          ) / history.length
+                        )
+                      : 0}
                   </p>
                 </div>
               </div>
@@ -241,24 +260,33 @@ export const History: React.FC = () => {
                           Run {snapshot.run_id}
                         </span>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm mb-3">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-gray-400" />
-                          <span className="text-gray-600">{formatDate(snapshot.date)}</span>
+                          <span className="text-gray-600">
+                            {formatDate(snapshot.date)}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4 text-gray-400" />
-                          <span className="text-gray-600">{snapshot.operator}</span>
+                          <span className="text-gray-600">
+                            {snapshot.operator}
+                          </span>
                         </div>
                         <div className="text-gray-600">
-                          <span className="font-medium">{snapshot.decisions.length}</span> decisions
+                          <span className="font-medium">
+                            {snapshot.decisions.length}
+                          </span>{' '}
+                          decisions
                         </div>
                         <div className="text-gray-600">
-                          <span className="font-medium">{formatRelativeTime(snapshot.date)}</span>
+                          <span className="font-medium">
+                            {formatRelativeTime(snapshot.date)}
+                          </span>
                         </div>
                       </div>
-                      
+
                       {/* Decision Summary */}
                       <div className="flex flex-wrap gap-2 mb-3">
                         <div className="px-2 py-1 bg-success-100 text-success-800 text-xs rounded-full">
@@ -276,57 +304,83 @@ export const History: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      
+
                       {/* Decision Details */}
                       <div className="text-sm">
-                        <h4 className="font-medium text-gray-900 mb-2">Decisions Made:</h4>
+                        <h4 className="font-medium text-gray-900 mb-2">
+                          Decisions Made:
+                        </h4>
                         <div className="space-y-1">
-                          {snapshot.decisions.slice(0, 5).map((decision, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-gray-600">
-                              <span className="font-medium">{decision.id}:</span>
-                              <span className="px-2 py-0.5 bg-gray-100 text-gray-800 text-xs rounded">
-                                {decision.action}
-                              </span>
-                              {decision.note && (
-                                <span className="text-gray-500">- {decision.note}</span>
-                              )}
-                            </div>
-                          ))}
+                          {snapshot.decisions
+                            .slice(0, 5)
+                            .map((decision, idx) => (
+                              <div
+                                key={idx}
+                                className="flex items-center gap-2 text-gray-600"
+                              >
+                                <span className="font-medium">
+                                  {decision.id}:
+                                </span>
+                                <span className="px-2 py-0.5 bg-gray-100 text-gray-800 text-xs rounded">
+                                  {decision.action}
+                                </span>
+                                {decision.note && (
+                                  <span className="text-gray-500">
+                                    - {decision.note}
+                                  </span>
+                                )}
+                              </div>
+                            ))}
                           {snapshot.decisions.length > 5 && (
                             <div className="text-gray-500 text-xs">
-                              ... and {snapshot.decisions.length - 5} more decisions
+                              ... and {snapshot.decisions.length - 5} more
+                              decisions
                             </div>
                           )}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 ml-4">
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant="outline"
-                        onClick={() => setSelectedSnapshot(
-                          selectedSnapshot === snapshot.snapshot_id ? null : snapshot.snapshot_id
-                        )}
+                        onClick={() =>
+                          setSelectedSnapshot(
+                            selectedSnapshot === snapshot.snapshot_id
+                              ? null
+                              : snapshot.snapshot_id
+                          )
+                        }
                       >
                         <Eye className="h-4 w-4 mr-1" />
-                        {selectedSnapshot === snapshot.snapshot_id ? 'Hide' : 'View'} Details
+                        {selectedSnapshot === snapshot.snapshot_id
+                          ? 'Hide'
+                          : 'View'}{' '}
+                        Details
                       </Button>
                     </div>
                   </div>
-                  
+
                   {/* Expanded Details */}
                   {selectedSnapshot === snapshot.snapshot_id && (
                     <div className="mt-4 pt-4 border-t border-gray-200">
                       <div className="space-y-4">
                         {/* Reasoning Details */}
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-2">Reasoning Logs:</h4>
+                          <h4 className="font-medium text-gray-900 mb-2">
+                            Reasoning Logs:
+                          </h4>
                           <div className="space-y-2">
                             {snapshot.reasons.map((reason, idx) => (
-                              <div key={idx} className="p-3 bg-gray-50 rounded-lg">
+                              <div
+                                key={idx}
+                                className="p-3 bg-gray-50 rounded-lg"
+                              >
                                 <div className="flex items-center gap-2 mb-1">
-                                  <span className="font-medium text-gray-900">{reason.id}</span>
+                                  <span className="font-medium text-gray-900">
+                                    {reason.id}
+                                  </span>
                                   <span className="px-2 py-0.5 bg-primary-100 text-primary-800 text-xs rounded">
                                     {reason.action}
                                   </span>
@@ -350,7 +404,7 @@ export const History: React.FC = () => {
                   )}
                 </div>
               ))}
-              
+
               {filteredHistory.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   <HistoryIcon className="h-12 w-12 mx-auto mb-4 text-gray-400" />
@@ -364,5 +418,3 @@ export const History: React.FC = () => {
     </Layout>
   );
 };
-
-

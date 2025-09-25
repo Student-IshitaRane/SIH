@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useAlerts } from '../hooks/useApi';
 import { formatRelativeTime, getSeverityColor } from '../utils';
-import { 
-  Bell, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
+import {
+  Bell,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
   Filter,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 
@@ -21,16 +26,20 @@ export const Alerts: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredAlerts = alerts?.filter(alert => {
-    const matchesSeverity = severityFilter === 'all' || alert.severity === severityFilter;
-    const matchesType = typeFilter === 'all' || alert.type === typeFilter;
-    const matchesStatus = statusFilter === 'all' || 
-      (statusFilter === 'resolved' && alert.resolved) ||
-      (statusFilter === 'unresolved' && !alert.resolved);
-    const matchesSearch = alert.train_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         alert.message.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSeverity && matchesType && matchesStatus && matchesSearch;
-  }) || [];
+  const filteredAlerts =
+    alerts?.filter((alert) => {
+      const matchesSeverity =
+        severityFilter === 'all' || alert.severity === severityFilter;
+      const matchesType = typeFilter === 'all' || alert.type === typeFilter;
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'resolved' && alert.resolved) ||
+        (statusFilter === 'unresolved' && !alert.resolved);
+      const matchesSearch =
+        alert.train_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        alert.message.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSeverity && matchesType && matchesStatus && matchesSearch;
+    }) || [];
 
   const getAlertIcon = (type: string) => {
     switch (type) {
@@ -87,8 +96,11 @@ export const Alerts: React.FC = () => {
     );
   }
 
-  const unresolvedCount = alerts?.filter(alert => !alert.resolved).length || 0;
-  const criticalCount = alerts?.filter(alert => alert.severity === 'critical' && !alert.resolved).length || 0;
+  const unresolvedCount =
+    alerts?.filter((alert) => !alert.resolved).length || 0;
+  const criticalCount =
+    alerts?.filter((alert) => alert.severity === 'critical' && !alert.resolved)
+      .length || 0;
 
   return (
     <Layout>
@@ -96,7 +108,9 @@ export const Alerts: React.FC = () => {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">IoT Alerts Feed</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              IoT Alerts Feed
+            </h1>
             <p className="text-gray-600 mt-1">
               Real-time monitoring of train status and system alerts
             </p>
@@ -117,12 +131,14 @@ export const Alerts: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Unresolved Alerts</p>
-                  <p className="text-2xl font-bold text-gray-900">{unresolvedCount}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {unresolvedCount}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -131,12 +147,14 @@ export const Alerts: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Critical Alerts</p>
-                  <p className="text-2xl font-bold text-gray-900">{criticalCount}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {criticalCount}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -146,10 +164,12 @@ export const Alerts: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Resolved Today</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {alerts?.filter(alert => 
-                      alert.resolved && 
-                      alert.resolved_at && 
-                      new Date(alert.resolved_at).toDateString() === new Date().toDateString()
+                    {alerts?.filter(
+                      (alert) =>
+                        alert.resolved &&
+                        alert.resolved_at &&
+                        new Date(alert.resolved_at).toDateString() ===
+                          new Date().toDateString()
                     ).length || 0}
                   </p>
                 </div>
@@ -196,7 +216,9 @@ export const Alerts: React.FC = () => {
                 >
                   <option value="all">All Types</option>
                   <option value="fitness_fail">Fitness Failure</option>
-                  <option value="maintenance_overdue">Maintenance Overdue</option>
+                  <option value="maintenance_overdue">
+                    Maintenance Overdue
+                  </option>
                   <option value="depot_full">Depot Full</option>
                   <option value="branding_expired">Branding Expired</option>
                 </select>
@@ -218,19 +240,21 @@ export const Alerts: React.FC = () => {
                 <div
                   key={alert.id}
                   className={`border rounded-lg p-4 transition-all ${
-                    alert.resolved 
-                      ? 'border-gray-200 bg-gray-50' 
+                    alert.resolved
+                      ? 'border-gray-200 bg-gray-50'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
-                      <div className={`p-2 rounded-lg ${
-                        alert.resolved ? 'bg-gray-100' : 'bg-danger-100'
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          alert.resolved ? 'bg-gray-100' : 'bg-danger-100'
+                        }`}
+                      >
                         {getAlertIcon(alert.type)}
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-2">
                           <span className="font-medium text-gray-900">
@@ -239,15 +263,17 @@ export const Alerts: React.FC = () => {
                           <span className="text-sm text-gray-600">
                             {getTypeLabel(alert.type)}
                           </span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(alert.severity)}`}>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(alert.severity)}`}
+                          >
                             {alert.severity}
                           </span>
                         </div>
-                        
+
                         <p className="text-sm text-gray-600 mb-2">
                           {alert.message}
                         </p>
-                        
+
                         <div className="flex items-center gap-4 text-xs text-gray-500">
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
@@ -258,13 +284,15 @@ export const Alerts: React.FC = () => {
                               <span>•</span>
                               <span>Resolved by {alert.resolved_by}</span>
                               <span>•</span>
-                              <span>{formatRelativeTime(alert.resolved_at!)}</span>
+                              <span>
+                                {formatRelativeTime(alert.resolved_at!)}
+                              </span>
                             </>
                           )}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       {alert.resolved ? (
                         <CheckCircle className="h-5 w-5 text-success-500" />
@@ -277,7 +305,7 @@ export const Alerts: React.FC = () => {
                   </div>
                 </div>
               ))}
-              
+
               {filteredAlerts.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   <Bell className="h-12 w-12 mx-auto mb-4 text-gray-400" />

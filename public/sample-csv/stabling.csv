@@ -1,0 +1,4 @@
+train_id,stabling_bay,accessibility_score,shunting_required,shunting_time_min,distance_from_bays_m
+T001,B-12,8.5,false,0,80
+T002,C-03,7.2,true,10,150
+T004,A-02,6.5,true,12,180

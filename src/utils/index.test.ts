@@ -11,7 +11,7 @@ import {
   debounce,
   throttle,
   sortBy,
-  groupBy
+  groupBy,
 } from './index';
 
 describe('Utility Functions', () => {
@@ -153,15 +153,16 @@ describe('Utility Functions', () => {
       const data = [
         { depot: 'A', id: 1 },
         { depot: 'B', id: 2 },
-        { depot: 'A', id: 3 }
+        { depot: 'A', id: 3 },
       ];
       const result = groupBy(data, 'depot');
       expect(result).toEqual({
-        A: [{ depot: 'A', id: 1 }, { depot: 'A', id: 3 }],
-        B: [{ depot: 'B', id: 2 }]
+        A: [
+          { depot: 'A', id: 1 },
+          { depot: 'A', id: 3 },
+        ],
+        B: [{ depot: 'B', id: 2 }],
       });
     });
   });
 });
-
-

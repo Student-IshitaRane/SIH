@@ -1,16 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { cn } from '../../utils';
-import { 
-  LayoutDashboard, 
-  Train, 
-  Wrench, 
-  Brain, 
-  Bell, 
-  Megaphone, 
-  History, 
+import {
+  LayoutDashboard,
+  Train,
+  Wrench,
+  Brain,
+  Bell,
+  Megaphone,
+  History,
   Settings,
-  BarChart3
+  BarChart3,
+  FileSpreadsheet,
 } from 'lucide-react';
 
 const navigation = [
@@ -20,6 +21,7 @@ const navigation = [
   { name: 'What-If Simulator', href: '/simulator', icon: Brain },
   { name: 'IoT Alerts', href: '/alerts', icon: Bell },
   { name: 'Branding Campaigns', href: '/branding', icon: Megaphone },
+  { name: 'ML Data Ingest', href: '/ml-ingest', icon: FileSpreadsheet },
   { name: 'History & Export', href: '/history', icon: History },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
@@ -48,7 +50,9 @@ export const Sidebar: React.FC = () => {
                   <item.icon
                     className={cn(
                       'mr-3 h-5 w-5 flex-shrink-0',
-                      isActive ? 'text-primary-600' : 'text-gray-400 group-hover:text-gray-500'
+                      isActive
+                        ? 'text-primary-600'
+                        : 'text-gray-400 group-hover:text-gray-500'
                     )}
                   />
                   {item.name}
@@ -58,7 +62,7 @@ export const Sidebar: React.FC = () => {
           ))}
         </div>
       </nav>
-      
+
       <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200">
         <div className="text-xs text-gray-500 text-center">
           <p>Kochi Metro Rail Limited</p>
@@ -68,5 +72,3 @@ export const Sidebar: React.FC = () => {
     </div>
   );
 };
-
-

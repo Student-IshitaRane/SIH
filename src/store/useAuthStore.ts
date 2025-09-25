@@ -19,10 +19,8 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       login: (user: User, token: string) =>
         set({ user, token, isAuthenticated: true }),
-      logout: () =>
-        set({ user: null, token: null, isAuthenticated: false }),
-      updateUser: (user: User) =>
-        set({ user }),
+      logout: () => set({ user: null, token: null, isAuthenticated: false }),
+      updateUser: (user: User) => set({ user }),
     }),
     {
       name: 'auth-storage',
@@ -34,5 +32,3 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
-
-

@@ -1,0 +1,4 @@
+train_id,advertiser_contract_id,exposure_hours_remaining,branding_priority_score,branding_deadline,penalty_risk_flag
+T001,AD-22,120,8,2025-10-05,false
+T002,AD-10,30,6,2025-09-30,true
+T004,AD-31,15,9,,true

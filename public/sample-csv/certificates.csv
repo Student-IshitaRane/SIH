@@ -1,0 +1,4 @@
+train_id,rolling_stock_status,rolling_stock_valid_until,signalling_status,signalling_valid_until,telecom_status,telecom_valid_until,overall_fitness_clearance
+T001,valid,2025-12-31,valid,2025-10-15,valid,2025-11-30,auto
+T002,expired,,valid,2025-09-30,valid,2025-11-15,manual_override_no
+T003,valid,2026-01-10,expired,,valid,2025-10-20,manual_override_yes

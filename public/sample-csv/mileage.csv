@@ -1,0 +1,4 @@
+train_id,total_km_since_maint,mileage_diff_from_avg,wear_bogie,wear_brake_pad,wear_hvac,recommended_allocation_km
+T001,3200,150,20,35,15,120
+T002,500,-700,5,10,8,200
+T003,2200,50,15,25,12,100

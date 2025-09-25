@@ -22,7 +22,7 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
   format = 'number',
   icon,
   description,
-  className
+  className,
 }) => {
   const formatValue = (val: number) => {
     switch (format) {
@@ -66,9 +66,7 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
         <CardTitle className="text-sm font-medium text-gray-600">
           {title}
         </CardTitle>
-        <div className="text-gray-400">
-          {icon}
-        </div>
+        <div className="text-gray-400">{icon}</div>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
@@ -83,26 +81,29 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
               </span>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-1">
               <Target className="h-3 w-3 text-gray-400" />
-              <span className="text-gray-500">Target: {formatValue(target)}</span>
+              <span className="text-gray-500">
+                Target: {formatValue(target)}
+              </span>
             </div>
-            <span className={cn(
-              'font-medium',
-              isAboveTarget ? 'text-success-600' : 'text-warning-600'
-            )}>
-              {isAboveTarget ? '+' : '-'}{formatValue(targetGap)}
+            <span
+              className={cn(
+                'font-medium',
+                isAboveTarget ? 'text-success-600' : 'text-warning-600'
+              )}
+            >
+              {isAboveTarget ? '+' : '-'}
+              {formatValue(targetGap)}
             </span>
           </div>
-          
+
           {description && (
-            <p className="text-xs text-gray-500 mt-2">
-              {description}
-            </p>
+            <p className="text-xs text-gray-500 mt-2">{description}</p>
           )}
-          
+
           {/* Progress bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
             <div
@@ -118,5 +119,3 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
     </Card>
   );
 };
-
-

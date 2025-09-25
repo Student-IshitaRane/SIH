@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useMaintenance, useFleet } from '../hooks/useApi';
 import { formatDate, formatRelativeTime, getSeverityColor } from '../utils';
 import { MaintenanceJob } from '../types';
-import { 
-  Wrench, 
-  Clock, 
-  CheckCircle, 
-  AlertTriangle, 
-  Users, 
+import {
+  Wrench,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  Users,
   Calendar,
   Filter,
-  Plus
+  Plus,
 } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 
 export const Maintenance: React.FC = () => {
-  const { data: maintenanceJobs, isLoading: maintenanceLoading } = useMaintenance();
+  const { data: maintenanceJobs, isLoading: maintenanceLoading } =
+    useMaintenance();
   const { isLoading: fleetLoading } = useFleet();
   const [selectedDepot, setSelectedDepot] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
@@ -26,13 +32,17 @@ export const Maintenance: React.FC = () => {
 
   const isLoading = maintenanceLoading || fleetLoading;
 
-  const filteredJobs = maintenanceJobs?.filter(job => {
-    const matchesDepot = selectedDepot === 'all' || job.depot === selectedDepot;
-    const matchesStatus = selectedStatus === 'all' || job.status === selectedStatus;
-    const matchesSearch = job.train_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesDepot && matchesStatus && matchesSearch;
-  }) || [];
+  const filteredJobs =
+    maintenanceJobs?.filter((job) => {
+      const matchesDepot =
+        selectedDepot === 'all' || job.depot === selectedDepot;
+      const matchesStatus =
+        selectedStatus === 'all' || job.status === selectedStatus;
+      const matchesSearch =
+        job.train_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.description.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesDepot && matchesStatus && matchesSearch;
+    }) || [];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -76,14 +86,31 @@ export const Maintenance: React.FC = () => {
   };
 
   const getDepotStats = () => {
-    const stats = maintenanceJobs?.reduce((acc, job) => {
-      if (!acc[job.depot]) {
-        acc[job.depot] = { total: 0, pending: 0, in_progress: 0, completed: 0 };
-      }
-      acc[job.depot].total++;
-      acc[job.depot][job.status as keyof typeof acc[string]]++;
-      return acc;
-    }, {} as Record<string, { total: number; pending: number; in_progress: number; completed: number }>) || {};
+    const stats =
+      maintenanceJobs?.reduce(
+        (acc, job) => {
+          if (!acc[job.depot]) {
+            acc[job.depot] = {
+              total: 0,
+              pending: 0,
+              in_progress: 0,
+              completed: 0,
+            };
+          }
+          acc[job.depot].total++;
+          acc[job.depot][job.status as keyof (typeof acc)[string]]++;
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            total: number;
+            pending: number;
+            in_progress: number;
+            completed: number;
+          }
+        >
+      ) || {};
 
     return stats;
   };
@@ -109,7 +136,9 @@ export const Maintenance: React.FC = () => {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Maintenance & Depot</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Maintenance & Depot
+            </h1>
             <p className="text-gray-600 mt-1">
               Manage maintenance schedules and depot operations
             </p>
@@ -138,21 +167,30 @@ export const Maintenance: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Pending:</span>
-                    <span className="font-medium text-warning-600">{stats.pending}</span>
+                    <span className="font-medium text-warning-600">
+                      {stats.pending}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">In Progress:</span>
-                    <span className="font-medium text-primary-600">{stats.in_progress}</span>
+                    <span className="font-medium text-primary-600">
+                      {stats.in_progress}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Completed:</span>
-                    <span className="font-medium text-success-600">{stats.completed}</span>
+                    <span className="font-medium text-success-600">
+                      {stats.completed}
+                    </span>
                   </div>
                   <div className="pt-2 border-t border-gray-200">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Completion Rate:</span>
                       <span className="font-medium">
-                        {stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%
+                        {stats.total > 0
+                          ? Math.round((stats.completed / stats.total) * 100)
+                          : 0}
+                        %
                       </span>
                     </div>
                   </div>
@@ -216,14 +254,20 @@ export const Maintenance: React.FC = () => {
                     <div className="flex items-start gap-4">
                       <div className="flex items-center gap-2">
                         {getStatusIcon(job.status)}
-                        <span className="font-medium text-gray-900">{job.train_id}</span>
+                        <span className="font-medium text-gray-900">
+                          {job.train_id}
+                        </span>
                       </div>
-                      
+
                       <div className="flex items-center gap-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(job.status)}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(job.status)}`}
+                        >
                           {job.status.replace('_', ' ')}
                         </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(job.priority)}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(job.priority)}`}
+                        >
                           {job.priority}
                         </span>
                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -231,7 +275,7 @@ export const Maintenance: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className="text-right text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
@@ -239,10 +283,12 @@ export const Maintenance: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="mt-3">
-                    <p className="text-sm text-gray-900 mb-2">{job.description}</p>
-                    
+                    <p className="text-sm text-gray-900 mb-2">
+                      {job.description}
+                    </p>
+
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       <div className="flex items-center gap-4">
                         {job.assigned_crew && (
@@ -260,26 +306,26 @@ export const Maintenance: React.FC = () => {
                         {job.completion_date && (
                           <div className="flex items-center gap-1">
                             <CheckCircle className="h-4 w-4" />
-                            <span>Completed: {formatDate(job.completion_date)}</span>
+                            <span>
+                              Completed: {formatDate(job.completion_date)}
+                            </span>
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="flex gap-2">
                         <Button size="sm" variant="outline">
                           View Details
                         </Button>
                         {job.status === 'pending' && (
-                          <Button size="sm">
-                            Start Work
-                          </Button>
+                          <Button size="sm">Start Work</Button>
                         )}
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
-              
+
               {filteredJobs.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   <Wrench className="h-12 w-12 mx-auto mb-4 text-gray-400" />
@@ -301,13 +347,14 @@ export const Maintenance: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Pending Jobs</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {maintenanceJobs?.filter(job => job.status === 'pending').length || 0}
+                    {maintenanceJobs?.filter((job) => job.status === 'pending')
+                      .length || 0}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -317,13 +364,15 @@ export const Maintenance: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">In Progress</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {maintenanceJobs?.filter(job => job.status === 'in_progress').length || 0}
+                    {maintenanceJobs?.filter(
+                      (job) => job.status === 'in_progress'
+                    ).length || 0}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -333,16 +382,18 @@ export const Maintenance: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Completed Today</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {maintenanceJobs?.filter(job => 
-                      job.status === 'completed' && 
-                      job.completion_date === new Date().toISOString().split('T')[0]
+                    {maintenanceJobs?.filter(
+                      (job) =>
+                        job.status === 'completed' &&
+                        job.completion_date ===
+                          new Date().toISOString().split('T')[0]
                     ).length || 0}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
@@ -352,7 +403,8 @@ export const Maintenance: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Overdue</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {maintenanceJobs?.filter(job => job.priority === 'urgent').length || 0}
+                    {maintenanceJobs?.filter((job) => job.priority === 'urgent')
+                      .length || 0}
                   </p>
                 </div>
               </div>

@@ -2,7 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Input } from '../ui/Input';
 import { useFleet } from '../../hooks/useApi';
-import { formatNumber, formatDate, getDepotColor, getFitnessScoreColor, getMileageColor, getStatusColor } from '../../utils';
+import {
+  formatNumber,
+  formatDate,
+  getDepotColor,
+  getFitnessScoreColor,
+  getMileageColor,
+  getStatusColor,
+} from '../../utils';
 import { SortAsc, SortDesc } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 
@@ -12,13 +19,19 @@ interface FleetTableProps {
   onTrainDeselect: (trainId: string) => void;
 }
 
-type SortField = 'id' | 'depot' | 'mileage_km' | 'fitness_score' | 'last_maintenance' | 'branding_campaign';
+type SortField =
+  | 'id'
+  | 'depot'
+  | 'mileage_km'
+  | 'fitness_score'
+  | 'last_maintenance'
+  | 'branding_campaign';
 type SortDirection = 'asc' | 'desc';
 
 export const FleetTable: React.FC<FleetTableProps> = ({
   selectedTrains,
   onTrainSelect,
-  onTrainDeselect
+  onTrainDeselect,
 }) => {
   const { data: fleet, isLoading, error } = useFleet();
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,9 +42,12 @@ export const FleetTable: React.FC<FleetTableProps> = ({
   const filteredAndSortedFleet = useMemo(() => {
     if (!fleet) return [];
 
-    let filtered = fleet.filter(train => {
-      const matchesSearch = train.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           train.branding_campaign?.toLowerCase().includes(searchTerm.toLowerCase());
+    let filtered = fleet.filter((train) => {
+      const matchesSearch =
+        train.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        train.branding_campaign
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase());
       const matchesDepot = depotFilter === 'all' || train.depot === depotFilter;
       return matchesSearch && matchesDepot;
     });
@@ -66,8 +82,13 @@ export const FleetTable: React.FC<FleetTableProps> = ({
   };
 
   const getSortIcon = (field: SortField) => {
-    if (sortField !== field) return <SortAsc className="h-4 w-4 text-gray-400" />;
-    return sortDirection === 'asc' ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />;
+    if (sortField !== field)
+      return <SortAsc className="h-4 w-4 text-gray-400" />;
+    return sortDirection === 'asc' ? (
+      <SortAsc className="h-4 w-4" />
+    ) : (
+      <SortDesc className="h-4 w-4" />
+    );
   };
 
   const handleTrainToggle = (trainId: string) => {
@@ -134,12 +155,21 @@ export const FleetTable: React.FC<FleetTableProps> = ({
                 <th className="text-left py-3 px-2">
                   <input
                     type="checkbox"
-                    checked={selectedTrains.length === filteredAndSortedFleet.length && filteredAndSortedFleet.length > 0}
+                    checked={
+                      selectedTrains.length === filteredAndSortedFleet.length &&
+                      filteredAndSortedFleet.length > 0
+                    }
                     onChange={() => {
-                      if (selectedTrains.length === filteredAndSortedFleet.length) {
-                        filteredAndSortedFleet.forEach(train => onTrainDeselect(train.id));
+                      if (
+                        selectedTrains.length === filteredAndSortedFleet.length
+                      ) {
+                        filteredAndSortedFleet.forEach((train) =>
+                          onTrainDeselect(train.id)
+                        );
                       } else {
-                        filteredAndSortedFleet.forEach(train => onTrainSelect(train.id));
+                        filteredAndSortedFleet.forEach((train) =>
+                          onTrainSelect(train.id)
+                        );
                       }
                     }}
                     className="rounded border-gray-300"
@@ -218,19 +248,27 @@ export const FleetTable: React.FC<FleetTableProps> = ({
                       className="rounded border-gray-300"
                     />
                   </td>
-                  <td className="py-3 px-2 font-medium text-gray-900">{train.id}</td>
+                  <td className="py-3 px-2 font-medium text-gray-900">
+                    {train.id}
+                  </td>
                   <td className="py-3 px-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getDepotColor(train.depot)}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium border ${getDepotColor(train.depot)}`}
+                    >
                       {train.depot}
                     </span>
                   </td>
                   <td className="py-3 px-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getMileageColor(train.mileage_km)}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${getMileageColor(train.mileage_km)}`}
+                    >
                       {formatNumber(train.mileage_km)} km
                     </span>
                   </td>
                   <td className="py-3 px-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFitnessScoreColor(train.fitness_score)}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${getFitnessScoreColor(train.fitness_score)}`}
+                    >
                       {formatNumber(train.fitness_score * 100, 1)}%
                     </span>
                   </td>
@@ -247,7 +285,9 @@ export const FleetTable: React.FC<FleetTableProps> = ({
                     )}
                   </td>
                   <td className="py-3 px-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(train.available ? 'available' : 'unavailable')}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(train.available ? 'available' : 'unavailable')}`}
+                    >
                       {train.available ? 'Available' : 'Unavailable'}
                     </span>
                   </td>
@@ -256,13 +296,13 @@ export const FleetTable: React.FC<FleetTableProps> = ({
             </tbody>
           </table>
         </div>
-        
+
         {filteredAndSortedFleet.length === 0 && (
           <div className="text-center py-8 text-gray-500">
             No trains found matching your criteria
           </div>
         )}
-        
+
         <div className="mt-4 text-sm text-gray-600">
           Showing {filteredAndSortedFleet.length} of {fleet.length} trains
           {selectedTrains.length > 0 && (

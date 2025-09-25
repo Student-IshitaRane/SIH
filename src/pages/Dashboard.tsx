@@ -4,13 +4,13 @@ import { KPIWidget } from '../components/dashboard/KPIWidget';
 import { FleetOverview } from '../components/dashboard/FleetOverview';
 import { RecentAlerts } from '../components/dashboard/RecentAlerts';
 import { useKPIs } from '../hooks/useApi';
-import { 
-  Clock, 
-  DollarSign, 
-  Eye, 
+import {
+  Clock,
+  DollarSign,
+  Eye,
   BarChart3,
   TrendingUp,
-  Activity
+  Activity,
 } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 
@@ -64,7 +64,7 @@ export const Dashboard: React.FC = () => {
             icon={<Clock className="h-5 w-5" />}
             description="On-time induction percentage"
           />
-          
+
           <KPIWidget
             title="Cost Savings"
             value={kpis.maintenance_cost.savings_estimate}
@@ -74,7 +74,7 @@ export const Dashboard: React.FC = () => {
             icon={<DollarSign className="h-5 w-5" />}
             description="Maintenance cost reduction"
           />
-          
+
           <KPIWidget
             title="Transparency"
             value={kpis.transparency.auto_explained_percentage}
@@ -84,7 +84,7 @@ export const Dashboard: React.FC = () => {
             icon={<Eye className="h-5 w-5" />}
             description="Auto-explained decisions"
           />
-          
+
           <KPIWidget
             title="Depot Utilization"
             value={kpis.depot_utilization.average}
@@ -127,28 +127,40 @@ export const Dashboard: React.FC = () => {
 
         {/* Quick Actions */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Quick Actions
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button className="flex items-center gap-3 p-4 bg-primary-50 border border-primary-200 rounded-lg hover:bg-primary-100 transition-colors">
               <TrendingUp className="h-5 w-5 text-primary-600" />
               <div className="text-left">
-                <div className="font-medium text-primary-900">Run Optimizer</div>
-                <div className="text-sm text-primary-600">Generate induction plan</div>
+                <div className="font-medium text-primary-900">
+                  Run Optimizer
+                </div>
+                <div className="text-sm text-primary-600">
+                  Generate induction plan
+                </div>
               </div>
             </button>
-            
+
             <button className="flex items-center gap-3 p-4 bg-success-50 border border-success-200 rounded-lg hover:bg-success-100 transition-colors">
               <Activity className="h-5 w-5 text-success-600" />
               <div className="text-left">
-                <div className="font-medium text-success-900">View Maintenance</div>
-                <div className="text-sm text-success-600">Check maintenance queue</div>
+                <div className="font-medium text-success-900">
+                  View Maintenance
+                </div>
+                <div className="text-sm text-success-600">
+                  Check maintenance queue
+                </div>
               </div>
             </button>
-            
+
             <button className="flex items-center gap-3 p-4 bg-warning-50 border border-warning-200 rounded-lg hover:bg-warning-100 transition-colors">
               <BarChart3 className="h-5 w-5 text-warning-600" />
               <div className="text-left">
-                <div className="font-medium text-warning-900">Simulate Changes</div>
+                <div className="font-medium text-warning-900">
+                  Simulate Changes
+                </div>
                 <div className="text-sm text-warning-600">What-if analysis</div>
               </div>
             </button>
@@ -158,5 +170,3 @@ export const Dashboard: React.FC = () => {
     </Layout>
   );
 };
-
-

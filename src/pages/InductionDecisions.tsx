@@ -3,35 +3,47 @@ import { Layout } from '../components/layout/Layout';
 import { FleetTable } from '../components/induction/FleetTable';
 import { RankedList } from '../components/induction/RankedList';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/Card';
 import { useFleet, useOptimize, useSaveDecisions } from '../hooks/useApi';
 import { useAuthStore } from '../store/useAuthStore';
 import { useInductionStore } from '../store/useInductionStore';
 import { formatDate } from '../utils';
-import { 
-  Play, 
-  Save, 
-  Download, 
-  Clock, 
+import {
+  Play,
+  Save,
+  Download,
+  Clock,
   CheckCircle,
   AlertTriangle,
-  Brain
+  Brain,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const InductionDecisions: React.FC = () => {
   const { data: fleet, isLoading: fleetLoading } = useFleet();
   const { user } = useAuthStore();
-  const { currentRun, decisions, published, setCurrentRun, addDecision, setPublished } = useInductionStore();
-  
+  const {
+    currentRun,
+    decisions,
+    published,
+    setCurrentRun,
+    addDecision,
+    setPublished,
+  } = useInductionStore();
+
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
   const [optimizationParams, setOptimizationParams] = useState({
     weighting: {
       reliability: 0.6,
       branding: 0.2,
-      cost: 0.2
+      cost: 0.2,
     },
-    depot_balance: true
+    depot_balance: true,
   });
 
   const optimizeMutation = useOptimize();
@@ -46,9 +58,9 @@ export const InductionDecisions: React.FC = () => {
     try {
       const result = await optimizeMutation.mutateAsync({
         date: new Date().toISOString().split('T')[0],
-        params: optimizationParams
+        params: optimizationParams,
       });
-      
+
       setCurrentRun(result);
       toast.success('AI optimization completed successfully');
     } catch (error: any) {
@@ -62,9 +74,9 @@ export const InductionDecisions: React.FC = () => {
       action: action as any,
       operator: user?.username || 'unknown',
       note,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-    
+
     toast.success(`Decision recorded for ${trainId}`);
   };
 
@@ -80,17 +92,19 @@ export const InductionDecisions: React.FC = () => {
     }
 
     try {
-      const decisionsArray = Object.entries(decisions).map(([id, decision]) => ({
-        id,
-        action: decision.action,
-        operator: user?.username || 'unknown',
-        note: decision.note
-      }));
+      const decisionsArray = Object.entries(decisions).map(
+        ([id, decision]) => ({
+          id,
+          action: decision.action,
+          operator: user?.username || 'unknown',
+          note: decision.note,
+        })
+      );
 
       await saveDecisionsMutation.mutateAsync({
         run_id: currentRun.run_id,
         decisions: decisionsArray,
-        published: true
+        published: true,
       });
 
       setPublished(true);
@@ -101,18 +115,21 @@ export const InductionDecisions: React.FC = () => {
   };
 
   const handleTrainSelect = (trainId: string) => {
-    setSelectedTrains(prev => [...prev, trainId]);
+    setSelectedTrains((prev) => [...prev, trainId]);
   };
 
   const handleTrainDeselect = (trainId: string) => {
-    setSelectedTrains(prev => prev.filter(id => id !== trainId));
+    setSelectedTrains((prev) => prev.filter((id) => id !== trainId));
   };
 
   const getDecisionSummary = () => {
-    const summary = Object.values(decisions).reduce((acc, decision) => {
-      acc[decision.action] = (acc[decision.action] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const summary = Object.values(decisions).reduce(
+      (acc, decision) => {
+        acc[decision.action] = (acc[decision.action] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return summary;
   };
@@ -124,7 +141,9 @@ export const InductionDecisions: React.FC = () => {
       <div className="space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Induction Decisions</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Induction Decisions
+          </h1>
           <p className="text-gray-600 mt-1">
             AI-driven train induction planning and decision management
           </p>
@@ -141,62 +160,83 @@ export const InductionDecisions: React.FC = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Reliability Weight</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Reliability Weight
+                </label>
                 <input
                   type="range"
                   min="0"
                   max="1"
                   step="0.1"
                   value={optimizationParams.weighting.reliability}
-                  onChange={(e) => setOptimizationParams(prev => ({
-                    ...prev,
-                    weighting: { ...prev.weighting, reliability: parseFloat(e.target.value) }
-                  }))}
+                  onChange={(e) =>
+                    setOptimizationParams((prev) => ({
+                      ...prev,
+                      weighting: {
+                        ...prev.weighting,
+                        reliability: parseFloat(e.target.value),
+                      },
+                    }))
+                  }
                   className="w-full"
                 />
                 <div className="text-sm text-gray-600">
                   {Math.round(optimizationParams.weighting.reliability * 100)}%
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Branding Weight</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Branding Weight
+                </label>
                 <input
                   type="range"
                   min="0"
                   max="1"
                   step="0.1"
                   value={optimizationParams.weighting.branding}
-                  onChange={(e) => setOptimizationParams(prev => ({
-                    ...prev,
-                    weighting: { ...prev.weighting, branding: parseFloat(e.target.value) }
-                  }))}
+                  onChange={(e) =>
+                    setOptimizationParams((prev) => ({
+                      ...prev,
+                      weighting: {
+                        ...prev.weighting,
+                        branding: parseFloat(e.target.value),
+                      },
+                    }))
+                  }
                   className="w-full"
                 />
                 <div className="text-sm text-gray-600">
                   {Math.round(optimizationParams.weighting.branding * 100)}%
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Cost Weight</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Cost Weight
+                </label>
                 <input
                   type="range"
                   min="0"
                   max="1"
                   step="0.1"
                   value={optimizationParams.weighting.cost}
-                  onChange={(e) => setOptimizationParams(prev => ({
-                    ...prev,
-                    weighting: { ...prev.weighting, cost: parseFloat(e.target.value) }
-                  }))}
+                  onChange={(e) =>
+                    setOptimizationParams((prev) => ({
+                      ...prev,
+                      weighting: {
+                        ...prev.weighting,
+                        cost: parseFloat(e.target.value),
+                      },
+                    }))
+                  }
                   className="w-full"
                 />
                 <div className="text-sm text-gray-600">
                   {Math.round(optimizationParams.weighting.cost * 100)}%
                 </div>
               </div>
-              
+
               <div className="flex items-end">
                 <Button
                   onClick={handleOptimize}
@@ -224,9 +264,14 @@ export const InductionDecisions: React.FC = () => {
             <CardContent>
               <div className="flex flex-wrap gap-4">
                 {Object.entries(decisionSummary).map(([action, count]) => (
-                  <div key={action} className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg">
+                  <div
+                    key={action}
+                    className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg"
+                  >
                     <span className="font-medium text-gray-900">{action}:</span>
-                    <span className="text-lg font-bold text-primary-600">{count}</span>
+                    <span className="text-lg font-bold text-primary-600">
+                      {count}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -268,12 +313,15 @@ export const InductionDecisions: React.FC = () => {
                 fleet={fleet || []}
                 onDecision={handleDecision}
                 decisions={Object.fromEntries(
-                  decisions.map(d => [d.id, { 
-                    action: d.action, 
-                    note: d.note, 
-                    operator: d.operator, 
-                    timestamp: d.timestamp 
-                  }])
+                  decisions.map((d) => [
+                    d.id,
+                    {
+                      action: d.action,
+                      note: d.note,
+                      operator: d.operator,
+                      timestamp: d.timestamp,
+                    },
+                  ])
                 )}
                 loading={optimizeMutation.isPending}
               />
@@ -282,8 +330,12 @@ export const InductionDecisions: React.FC = () => {
                 <CardContent className="flex items-center justify-center py-12">
                   <div className="text-center">
                     <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Optimization Results</h3>
-                    <p className="text-gray-600 mb-4">Run the AI optimizer to generate induction recommendations</p>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      No Optimization Results
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Run the AI optimizer to generate induction recommendations
+                    </p>
                     <Button
                       onClick={handleOptimize}
                       loading={optimizeMutation.isPending}
@@ -312,19 +364,27 @@ export const InductionDecisions: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                 <div>
                   <span className="text-gray-600">Execution Time:</span>
-                  <div className="font-medium">{currentRun.meta.execution_time_ms}ms</div>
+                  <div className="font-medium">
+                    {currentRun.meta.execution_time_ms}ms
+                  </div>
                 </div>
                 <div>
                   <span className="text-gray-600">Total Trains:</span>
-                  <div className="font-medium">{currentRun.meta.total_trains}</div>
+                  <div className="font-medium">
+                    {currentRun.meta.total_trains}
+                  </div>
                 </div>
                 <div>
                   <span className="text-gray-600">Depot Balance:</span>
-                  <div className="font-medium">{currentRun.meta.depot_balance ? 'Enabled' : 'Disabled'}</div>
+                  <div className="font-medium">
+                    {currentRun.meta.depot_balance ? 'Enabled' : 'Disabled'}
+                  </div>
                 </div>
                 <div>
                   <span className="text-gray-600">Generated:</span>
-                  <div className="font-medium">{formatDate(currentRun.date)}</div>
+                  <div className="font-medium">
+                    {formatDate(currentRun.date)}
+                  </div>
                 </div>
               </div>
             </CardContent>

@@ -3,17 +3,23 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Trainset, OptimizationResult } from '../../types';
-import { formatNumber, formatDate, getDepotColor, getFitnessScoreColor, getMileageColor } from '../../utils';
-import { 
-  CheckCircle, 
-  Clock, 
-  Wrench, 
-  AlertTriangle, 
-  Star, 
-  MapPin, 
+import {
+  formatNumber,
+  formatDate,
+  getDepotColor,
+  getFitnessScoreColor,
+  getMileageColor,
+} from '../../utils';
+import {
+  CheckCircle,
+  Clock,
+  Wrench,
+  AlertTriangle,
+  Star,
+  MapPin,
   DollarSign,
   Megaphone,
-  Info
+  Info,
 } from 'lucide-react';
 
 interface TrainsetDetailCardProps {
@@ -27,13 +33,16 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
   train,
   result,
   onDecision,
-  decision
+  decision,
 }) => {
   const [note, setNote] = useState(decision?.note || '');
   const [showNoteInput, setShowNoteInput] = useState(false);
 
   const handleAction = (action: string) => {
-    if (action !== decision?.action && (action === 'reject' || action === 'maintenance')) {
+    if (
+      action !== decision?.action &&
+      (action === 'reject' || action === 'maintenance')
+    ) {
       setShowNoteInput(true);
     } else {
       onDecision(train.id, action, note || undefined);
@@ -52,11 +61,16 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
   const getActionButtonVariant = (action: string) => {
     if (decision?.action === action) return 'primary';
     switch (action) {
-      case 'induct': return 'success';
-      case 'standby': return 'secondary';
-      case 'maintenance': return 'warning';
-      case 'reject': return 'danger';
-      default: return 'outline';
+      case 'induct':
+        return 'success';
+      case 'standby':
+        return 'secondary';
+      case 'maintenance':
+        return 'warning';
+      case 'reject':
+        return 'danger';
+      default:
+        return 'outline';
     }
   };
 
@@ -71,14 +85,14 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
           </h4>
           <div className="space-y-1 text-sm">
             <div className="flex items-center gap-2">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getDepotColor(train.depot)}`}>
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium border ${getDepotColor(train.depot)}`}
+              >
                 Depot {train.depot}
               </span>
               <span className="text-gray-600">Available</span>
             </div>
-            <div className="text-gray-600">
-              Model: {train.model}
-            </div>
+            <div className="text-gray-600">Model: {train.model}</div>
             <div className="text-gray-600">
               Capacity: {train.capacity} passengers
             </div>
@@ -93,19 +107,25 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
           <div className="space-y-1 text-sm">
             <div className="flex items-center justify-between">
               <span className="text-gray-600">Fitness Score:</span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFitnessScoreColor(train.fitness_score)}`}>
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${getFitnessScoreColor(train.fitness_score)}`}
+              >
                 {formatNumber(train.fitness_score * 100, 1)}%
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-600">Mileage:</span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getMileageColor(train.mileage_km)}`}>
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${getMileageColor(train.mileage_km)}`}
+              >
                 {formatNumber(train.mileage_km)} km
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-600">Last Maintenance:</span>
-              <span className="text-gray-900">{formatDate(train.last_maintenance)}</span>
+              <span className="text-gray-900">
+                {formatDate(train.last_maintenance)}
+              </span>
             </div>
           </div>
         </div>
@@ -145,7 +165,9 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
         <CardContent>
           <div className="space-y-3">
             <div>
-              <h5 className="font-medium text-gray-900 mb-2">Positive Factors:</h5>
+              <h5 className="font-medium text-gray-900 mb-2">
+                Positive Factors:
+              </h5>
               <div className="flex flex-wrap gap-2">
                 {result.reasons.map((reason, idx) => (
                   <span
@@ -157,10 +179,12 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
                 ))}
               </div>
             </div>
-            
+
             {result.conflicts.length > 0 && (
               <div>
-                <h5 className="font-medium text-gray-900 mb-2">Conflicts & Issues:</h5>
+                <h5 className="font-medium text-gray-900 mb-2">
+                  Conflicts & Issues:
+                </h5>
                 <div className="flex flex-wrap gap-2">
                   {result.conflicts.map((conflict, idx) => (
                     <span
@@ -173,15 +197,23 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
                 </div>
               </div>
             )}
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-200">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Depot Balance Impact:</span>
-                <span className="font-medium">{formatNumber(result.depot_balance_impact * 100, 0)}%</span>
+                <span className="text-sm text-gray-600">
+                  Depot Balance Impact:
+                </span>
+                <span className="font-medium">
+                  {formatNumber(result.depot_balance_impact * 100, 0)}%
+                </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Branding Priority:</span>
-                <span className="font-medium">{result.branding_priority}/10</span>
+                <span className="text-sm text-gray-600">
+                  Branding Priority:
+                </span>
+                <span className="font-medium">
+                  {result.branding_priority}/10
+                </span>
               </div>
             </div>
           </div>
@@ -191,7 +223,7 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
       {/* Decision Actions */}
       <div className="space-y-4">
         <h4 className="font-medium text-gray-900">Decision Actions</h4>
-        
+
         <div className="flex flex-wrap gap-2">
           <Button
             variant={getActionButtonVariant('induct')}
@@ -200,9 +232,11 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
             disabled={decision?.action === 'induct'}
           >
             <CheckCircle className="h-4 w-4 mr-1" />
-            {decision?.action === 'induct' ? 'Approved for Induction' : 'Approve Induction'}
+            {decision?.action === 'induct'
+              ? 'Approved for Induction'
+              : 'Approve Induction'}
           </Button>
-          
+
           <Button
             variant={getActionButtonVariant('standby')}
             size="sm"
@@ -210,9 +244,11 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
             disabled={decision?.action === 'standby'}
           >
             <Clock className="h-4 w-4 mr-1" />
-            {decision?.action === 'standby' ? 'Marked as Standby' : 'Mark Standby'}
+            {decision?.action === 'standby'
+              ? 'Marked as Standby'
+              : 'Mark Standby'}
           </Button>
-          
+
           <Button
             variant={getActionButtonVariant('maintenance')}
             size="sm"
@@ -220,9 +256,11 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
             disabled={decision?.action === 'maintenance'}
           >
             <Wrench className="h-4 w-4 mr-1" />
-            {decision?.action === 'maintenance' ? 'Sent to Maintenance' : 'Send to Maintenance'}
+            {decision?.action === 'maintenance'
+              ? 'Sent to Maintenance'
+              : 'Send to Maintenance'}
           </Button>
-          
+
           <Button
             variant={getActionButtonVariant('reject')}
             size="sm"
@@ -247,10 +285,18 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
               className="w-full"
             />
             <div className="flex gap-2">
-              <Button size="sm" onClick={handleSubmitNote} disabled={!note.trim()}>
+              <Button
+                size="sm"
+                onClick={handleSubmitNote}
+                disabled={!note.trim()}
+              >
                 Submit Decision
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowNoteInput(false)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowNoteInput(false)}
+              >
                 Cancel
               </Button>
             </div>
@@ -260,7 +306,8 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
         {decision?.note && (
           <div className="p-3 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-600">
-              <span className="font-medium">Justification:</span> {decision.note}
+              <span className="font-medium">Justification:</span>{' '}
+              {decision.note}
             </p>
           </div>
         )}
@@ -268,5 +315,3 @@ export const TrainsetDetailCard: React.FC<TrainsetDetailCardProps> = ({
     </div>
   );
 };
-
-

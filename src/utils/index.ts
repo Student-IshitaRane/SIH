@@ -5,7 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
 }
 
-export function formatDate(date: string | Date, formatStr: string = 'MMM dd, yyyy'): string {
+export function formatDate(
+  date: string | Date,
+  formatStr: string = 'MMM dd, yyyy'
+): string {
   try {
     const dateObj = typeof date === 'string' ? parseISO(date) : date;
     if (!isValid(dateObj)) return 'Invalid Date';
@@ -26,20 +29,22 @@ export function formatTime(date: string | Date): string {
 export function formatRelativeTime(date: string | Date): string {
   const now = new Date();
   const targetDate = typeof date === 'string' ? parseISO(date) : date;
-  
+
   if (!isValid(targetDate)) return 'Invalid Date';
-  
-  const diffInMinutes = Math.floor((now.getTime() - targetDate.getTime()) / (1000 * 60));
-  
+
+  const diffInMinutes = Math.floor(
+    (now.getTime() - targetDate.getTime()) / (1000 * 60)
+  );
+
   if (diffInMinutes < 1) return 'Just now';
   if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-  
+
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) return `${diffInHours}h ago`;
-  
+
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 7) return `${diffInDays}d ago`;
-  
+
   return formatDate(targetDate);
 }
 
@@ -169,7 +174,7 @@ export function copyToClipboard(text: string): Promise<void> {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    
+
     return new Promise((resolve, reject) => {
       if (document.execCommand('copy')) {
         resolve();
@@ -195,24 +200,32 @@ export function truncateText(text: string, maxLength: number): string {
   return `${text.substring(0, maxLength)}...`;
 }
 
-export function sortBy<T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] {
+export function sortBy<T>(
+  array: T[],
+  key: keyof T,
+  direction: 'asc' | 'desc' = 'asc'
+): T[] {
   return [...array].sort((a, b) => {
     const aVal = a[key];
     const bVal = b[key];
-    
+
     if (aVal < bVal) return direction === 'asc' ? -1 : 1;
     if (aVal > bVal) return direction === 'asc' ? 1 : -1;
     return 0;
   });
 }
 
-export function groupBy<T, K extends keyof T>(array: T[], key: K): Record<string, T[]> {
-  return array.reduce((groups, item) => {
-    const group = String(item[key]);
-    groups[group] = groups[group] || [];
-    groups[group].push(item);
-    return groups;
-  }, {} as Record<string, T[]>);
+export function groupBy<T, K extends keyof T>(
+  array: T[],
+  key: K
+): Record<string, T[]> {
+  return array.reduce(
+    (groups, item) => {
+      const group = String(item[key]);
+      groups[group] = groups[group] || [];
+      groups[group].push(item);
+      return groups;
+    },
+    {} as Record<string, T[]>
+  );
 }
-
-
